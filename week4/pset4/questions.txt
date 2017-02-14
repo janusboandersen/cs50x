@@ -1,0 +1,79 @@
+0. How many different colors (color depth)
+BMP: Arbitrary
+JPG: Typically 24-bit (16 million)
+GIF: Typically 8-bit (256)
+PNG: Typically 24-bit (16 million) or 32-bit RGBA (16 million with 8-bit Alpha/translucency channel)
+
+1.  Supporting animation:
+The GIF format supports animation.
+
+2.  Lossy versus lossles compression:
+The JPEG format is lossy as it uses DCT (discrete cosine transform) compression, which causes pixel information to be traded 
+off for file size. The lossy nature means that image quality deteriorates after compression/encoding (can especially be seen with 
+line drawings and text), and that the format is not good images that must be edited/encoded multiple times or used for large-print 
+professional purposes.
+The PNG format, on the other hand, uses lossless compression - which means there is no loss of pixel information.
+
+3.  Lossy compression: JPEG.
+
+4.  Deletion of file in FAT system:
+The data from the file is not actually deleted, but rather the directory entry of the file is changed to signify that the file was deleted
+and the clusters reserved for the file are marked as free. As these steps are relatively easy to reverse, the file can be recovered.
+
+5.  Information security steps:
+Encrypt data to prevent it from unauthorized use, and ensuring to sanitize all physical media before discarding them. Sanitizing
+means outright desctruction (physical or magnetically) or just 'scubbing' the data by repeatedly overwriting the data clusters.
+
+6.  <stdint.h>
+<stdint.h> is a library that includes some integer types, among other fixed-width integers. The integer types in std will have standardized
+widths across all implementations (whereas the 'normal' int, long, etc. types might vary in byte size across different systems).
+
+7.  Using fixed-width variables in a packed data structure ensures that whatever is read from a file into memory will be perfectly aligned with the
+space allocated in memory. I.e., the bytes read from file align perfectly with the data structure that must hold them in mem.
+
+8.  Byte sizes of MS/Windows variables (and C primitives from <stdint.h>)
+BYTE (uint8_t): Unsigned 8-bit integer = 1 byte (supports value from 0 to 255)
+DWORD (uint32_t): Unsigned 32-bit integer = 4 bytes (supports values from 0 to 4,294,967,295).
+LONG (int32_t): Signed  32-bit integer = 4 bytes (supports values from –2,147,483,648 to 2,147,483,647).
+WORD(uint16_t): Unsigned 16-bit integer = 2 bytes (supports value from 0 to 65,535)
+
+9.  File signature / magic number of a BMP file (first two bytes)
+HEX: 0x42 0x4D
+Decimal: 66 77
+ASCII: B M
+
+10. 
+bfSize (in the BITMAPFILEHEADER): is the size of the entire bitmap file in bytes. Magnitude depends on resolution of file.
+biSize (in the BITMAPINFOHEADER/DIB header): is the size of DIB header itself. Should be 40 bytes in a standard BMP file.
+
+
+11. Negative biHeight
+If biHeight is negative, the bitmap is a top-down DIB with the origin at the upper left corner.
+Source: https://msdn.microsoft.com/en-us/library/windows/desktop/dd318229(v=vs.85).aspx
+
+12. Color depth
+Color depth is specified in the BITMAPINFOHEADER, in the biBitCount field: Specifies the info per pixel. 24-bits is most
+would be a 24-bit RGB (8 bits for each of the channels Red, Green and Blue).
+
+13. fopen() in copy.c:37 (output file) might return NULL if
+- File cannot be opened for write access (it is read-only)
+- The specified output filename is not a valid filename
+
+14. fread() third argument
+- The third argument (number of blocks to read) is always 1, because we want to read 1 block of the file, which
+exactly corresponds to the data structures set up (in bmp.h). So reading 1 block ensure that the data structure 
+exactly get filled, and is exactly aligned.
+
+15. Padding in copy.c:70 if bi.biWidth == 3
+Returns an integer number between 0 and 3 (both included), which represents the amount of padding needed to satisfy
+the BMP specification that the bytes per line (scanline) of a bitmap needs to be a multiple of 4.
+
+16. fseek()
+fseek() changes or sets the position of the pointer in the specified file, i.e. the position from where the next 
+read/write operation in that file will start.
+
+17. SEEK_CUR
+SEEK_CUR represent the current location of the pointer in the file. I.e., the point from where the next read/write
+operation in that file will start. It is used in the fseek() function, as a possible point from which to offset.
+
+18. Rick Astley - we got Rick Rolled!
